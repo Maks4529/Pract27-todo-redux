@@ -14,8 +14,12 @@ const axiosInstance = axios.create({
 export const getUserThunk = createAsyncThunk(
     "user/getUser", 
     async (payload, thunkAPI) => {
-        const {data} = await axiosInstance.get('?results=1');
-        return data; // fulfilled -> action.payload
+        try {
+            const {data} = await axiosInstance.get('?results=1');
+            return data; // fulfilled -> action.payload   
+        } catch (error) {
+            return thunkAPI.rejectWithValue({message: error.message}); // rejected -> action.payload
+        }
     }
 );
 
@@ -31,6 +35,10 @@ const userSlice = createSlice({
         builder.addCase(getUserThunk.fulfilled, (state, {payload}) => {
             state.user = payload.results;
             state.isFetching = false;
+        });
+        builder.addCase(getUserThunk.rejected, (state, {payload}) => {
+            state.isFetching = false;
+            state.error = payload;
         });
     }
 });

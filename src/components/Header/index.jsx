@@ -11,7 +11,7 @@ function Header({user, isFetching, error, getUser}) {
   return (
     <>
         {isFetching && <span className={styles.spanMessage}>Is Loading...</span>}
-        {error && <span className={styles.spanMessages}>Error loading data!</span>}
+        {error && <span className={styles.spanMessage}>Error loading data!</span>}
         {!isFetching && !error && Array.isArray(user) && <>{user.map(u =><div className={styles.header} key={u.login.uuid}><img src={u.picture.medium} alt={u.name.first}/> <div className={styles.userInfo}>{`${u.name.first} ${u.name.last}`}</div></div>)}</>}
     </>
   )
